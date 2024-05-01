@@ -1,0 +1,16 @@
+<nav class="navbar">
+  <div class="navbar-brand">Álláskereső</div>
+  <div class="navbar-links">
+    <a href="#" routerLink="/jobs">Munkák</a>
+    <a *ngIf="auth.userData['isSeeker']; else myAds" href="#" routerLink="/applications">Jelentkezések</a>
+    <ng-template #myAds><a href="#" routerLink="/my-ads">Hírdetéseim</a></ng-template>
+    <a href="#" routerLink="/notifications">Értesítések</a>
+    <div class="dropdown">
+      <button class="dropdown-button">{{ auth.userData['name'] }}</button>
+      <div class="dropdown-content">
+        <a href="#" routerLink="/profile">Profilom</a>
+        <a href="#" (click)="auth.logout()">Kijelentkezés</a>
+      </div>
+    </div>
+  </div>
+</nav>

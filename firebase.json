@@ -1,0 +1,9 @@
+{
+  "hosting": [
+    {
+      "target": "allaskereso-webker",
+      "source": ".",
+      "frameworksBackend": {}
+    }
+  ]
+}

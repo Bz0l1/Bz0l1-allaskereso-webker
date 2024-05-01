@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "allaskereso-webker-96da9": {
+      "hosting": {
+        "allaskereso-webker": [
+          "allaskereso-webker-96da9"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "allaskereso-webker-96da9"
+  }
+}
