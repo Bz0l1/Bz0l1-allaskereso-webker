@@ -2,10 +2,6 @@
 
 Hosting link: [https://allaskereso-5bd68.web.app/](https://allaskereso-webker-96da9.web.app/)
 
-## Környezeti változók
-
-A publikus repository miatt CooSpace-en mellékeltem a környezeti változókat.
-
 ## Felhasználók:
 
 Két felhasználót hoztam létre:
