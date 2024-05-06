@@ -37,8 +37,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   logout() {
     this.auth.logOut().then(() => {
-      this.router.navigate(['login']).catch((error) => {
-        console.error('Navigation error:', error);
+      this.router.navigate(['login']).catch((err) => {
+        console.error(':', err);
       });
     });
   }

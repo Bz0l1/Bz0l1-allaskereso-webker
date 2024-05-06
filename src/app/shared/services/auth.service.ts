@@ -65,8 +65,8 @@ export class AuthService {
             await this.updateAuthorizationLevel();
             await this.router.navigate(["home"]);
             console.log(this.currentUser?.uid)
-        } catch (error) {
-            console.error("Login failed:", error);
+        } catch (err) {
+            console.error("Login failed:", err);
             throw new Error("Hibás felhasználónév vagy jelszó!");
         }
     }

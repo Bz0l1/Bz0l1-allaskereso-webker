@@ -69,7 +69,6 @@ export class RegisterComponent implements OnInit {
             try {
                 const cred = await this.authService.signUp(email, password);
                 if (!cred || !cred.user) {
-                    console.error("No credentials returned");
                     alert("Regisztráció sikertelen, a felhasználói adatok nem érhetők el.");
                     return;
                 }
@@ -101,12 +100,12 @@ export class RegisterComponent implements OnInit {
                 } else {
                     alert("A felhasználó létrehozása sikertelen.");
                 }
-            } catch (error) {
-                console.error("Regisztráció sikertelen: ", error);
+            } catch (err) {
+                console.error("sikertelen: ", err);
                 alert("Regisztráció sikertelen, próbálja újra.");
             }
         } else {
-            alert("Kérjük, töltse ki helyesen az űrlapot.");
+            alert("töltsd ki helyesen a formot!");
         }
     }
 

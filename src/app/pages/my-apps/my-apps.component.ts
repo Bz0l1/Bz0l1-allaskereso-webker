@@ -41,11 +41,11 @@ export class MyAppsComponent implements OnInit {
 
     this.data.removeApp(application).then(success => {
       if (success) {
-        console.log('Success: Application removed');
+        console.log('Siker: jelentkezés törlése');
         this.apps = this.apps.filter(app => app !== itemElement);
         this.loadAppliedJobs();
       } else {
-        console.log('Failure: Could not remove application');
+        console.log('Sikertelen: jelentkezés törlése');
       }
     });
   }
