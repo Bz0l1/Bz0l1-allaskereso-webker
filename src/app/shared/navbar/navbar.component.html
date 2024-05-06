@@ -1,16 +1,25 @@
 <nav class="navbar">
-  <div class="navbar-brand">Álláskereső</div>
-  <div class="navbar-links">
-    <a href="#" routerLink="/jobs">Munkák</a>
-    <a *ngIf="auth.userData['isSeeker']; else myAds" href="#" routerLink="/applications">Jelentkezések</a>
-    <ng-template #myAds><a href="#" routerLink="/my-ads">Hírdetéseim</a></ng-template>
-    <a href="#" routerLink="/notifications">Értesítések</a>
+  <div class="navbar-logo">Álláskereső</div>
+  <div class="navbar-items" *ngIf="auth.currentUser; else login">
+    <a routerLink="/home">Munkák</a>
+    <ng-container *ngIf="auth.authLevel == 1; else myAds">
+      <a routerLink="/my-apps">Jelentkezéseim</a>
+    </ng-container>
+    <ng-template #myAds>
+      <a routerLink="/my-offers">Hírdetéseim</a>
+    </ng-template>
+    <!-- <a routerLink="/notifications">Értesítések</a> -->
     <div class="dropdown">
-      <button class="dropdown-button">{{ auth.userData['name'] }}</button>
+      <button class="dropbtn">{{ auth.userData?.name }}</button>
       <div class="dropdown-content">
-        <a href="#" routerLink="/profile">Profilom</a>
-        <a href="#" (click)="auth.logout()">Kijelentkezés</a>
+        <a routerLink="/profile">Profilom</a>
+        <a (click)="logout()">Kijelentkezés</a>
       </div>
     </div>
   </div>
+  <ng-template #login>
+    <div class="navbar-items">
+      <a routerLink="/login">Bejelentkezés</a>
+    </div>
+  </ng-template>
 </nav>

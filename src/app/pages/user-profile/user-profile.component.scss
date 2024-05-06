@@ -1,0 +1,173 @@
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #fff;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    margin: 20px 40px;
+  }
+}
+
+.profile-data {
+  flex: 1;
+  margin-right: 20px;
+
+  h1 {
+    color: #666;
+    font-size: 24px;
+  }
+
+  .personal {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+
+    h2 {
+      color: #444;
+      margin-top: 0;
+    }
+
+    .form {
+      .row {
+        margin-bottom: 20px;
+      }
+
+      button {
+        cursor: pointer;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: background-color 0.3s;
+      }
+    }
+  }
+}
+
+.cv-data {
+  flex: 2;
+
+  .delete-icon {
+    color: red;
+    margin-left: 5px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+
+  .cv {
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+
+    h2 {
+      color: #444;
+    }
+
+    .add-item {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 24px;
+    }
+
+    #popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      width: 90%;
+      max-width: 500px;
+
+      .popup-content {
+        .close {
+          float: right;
+          cursor: pointer;
+          font-size: 24px;
+        }
+
+        h2 {
+          clear: both;
+        }
+
+        form {
+          .input-box {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+
+            label {
+              flex: 1;
+            }
+
+            .icon {
+              margin-right: 10px;
+            }
+
+            select, input {
+              flex: 2;
+              padding: 8px;
+              border: 1px solid #ccc;
+              border-radius: 4px;
+            }
+          }
+
+          button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background-color: #6600ff;
+            color: white;
+            margin-top: 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+
+            &:hover {
+              background-color: #7212ff;
+            }
+          }
+        }
+      }
+    }
+
+    .educations {
+      margin-top: 20px;
+
+      .education {
+        background-color: #eee;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 10px;
+
+        h2 {
+          margin: 0;
+          color: #8c00ff;
+          font-size: 18px;
+        }
+
+        p {
+          color: #666;
+        }
+      }
+    }
+  }
+}

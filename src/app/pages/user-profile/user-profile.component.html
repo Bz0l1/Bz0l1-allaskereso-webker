@@ -1,0 +1,92 @@
+<app-navbar/>
+<div class="content">
+  <div class="profile-data" *ngIf="auth.authLevel == 1">
+    <h1>Személyes adatok, Önéletrajz</h1>
+    <div class="personal">
+      <h2>Név változtatása</h2>
+      <div class="form">
+        <div class="row">
+          <mat-form-field style="width: 100%;">
+            <mat-label>Teljes név</mat-label>
+            <input type="text" matInput #newname>
+          </mat-form-field>
+        </div>
+        <button matTooltip="Név felülírása" color="primary" mat-raised-button (click)="updateName(newname.value)">
+          Mentés
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="cv-data" *ngIf="auth.authLevel == 1">
+    <div class="cv">
+      <h2>Végzettség</h2>
+      <button class="add-item" (click)="showNewEducation = true">
+        <mat-icon>add</mat-icon>
+      </button>
+      <div id="popup" *ngIf="showNewEducation">
+        <div class="popup-content">
+          <div class="close" (click)="showNewEducation = false;">&#x2715;</div>
+          <h2>Képzettség</h2>
+          <form [formGroup]="skillForm" (ngSubmit)="onSubmitQualification()">
+            <div class="input-box">
+              <label>Végzettség típusa</label>
+              <div class="icon">
+                <i class="fa-solid fa-landmark"></i>
+              </div>
+              <select formControlName="type">
+              </select>
+            </div>
+            <div class="input-box">
+              <label>Végzettség neve</label>
+              <div class="icon">
+                <i class="fa-solid fa-signal"></i>
+              </div>
+              <input matInput type="text" formControlName="name">
+            </div>
+            <button type="submit">Mentés</button>
+          </form>
+        </div>
+      </div>
+      <div class="educations">
+        <div class="education" *ngFor="let item of skills">
+          <h2>
+            <mat-icon>circle</mat-icon>
+            {{ item.name }}
+            <mat-icon class="delete-icon" (click)="deleteSkills(item)">delete</mat-icon>
+          </h2>
+          <p>{{ item.type }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="profile-data" *ngIf="auth.authLevel == 2">
+    <h1>Céges adatok</h1>
+    <div class="personal">
+      <h2>Név változtatása</h2>
+      <div class="form">
+        <div class="row">
+          <mat-form-field style="width: 100%;">
+            <mat-label>Teljes név</mat-label>
+            <input type="text" matInput #newname>
+          </mat-form-field>
+        </div>
+        <button matTooltip="Név felülírása" color="primary" mat-raised-button (click)="updateName(newname.value)">
+          Mentés
+        </button>
+      </div>
+      <hr><br><hr>
+      <h2>Cégnév változtatása</h2>
+      <div class="form">
+        <div class="row">
+          <mat-form-field style="width: 100%;">
+            <mat-label>Cégnév</mat-label>
+            <input type="text" matInput #newcompanyname>
+          </mat-form-field>
+        </div>
+        <button matTooltip="Cégnév felülírása" color="primary" mat-raised-button (click)="updateCompanyName(newcompanyname.value)">
+          Mentés
+        </button>
+    </div>
+  </div>
+</div>
+

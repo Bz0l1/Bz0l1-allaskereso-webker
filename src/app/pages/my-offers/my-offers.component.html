@@ -1,0 +1,62 @@
+<app-navbar/>
+<div class="content">
+  <div class="card-container">
+    <h1>Hírdetéseim</h1>
+    <button mat-raised-button color="primary" (click)="openNewOfferModal()">Új Hírdetés</button>
+    <div class="modal" *ngIf="showModal">
+      <div class="modal-content">
+        <h2>Új hírdetés feladása</h2>
+        <form [formGroup]="offerForm" (ngSubmit)="createNewOffer()">
+          <div class="form-row">
+            <mat-form-field>
+              <mat-icon>business_center</mat-icon>
+              <input matInput placeholder="Megnevezés" formControlName="name">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-icon>attach_money</mat-icon>
+              <input matInput placeholder="Fizetés" formControlName="salary">
+            </mat-form-field>
+          </div>
+          <mat-form-field class="full-width">
+            <textarea matInput placeholder="Leírás" formControlName="description"></textarea>
+          </mat-form-field>
+          <div class="button-row">
+            <button mat-raised-button color="primary" type="submit" [disabled]="offerForm.invalid">Hírdetés feladása</button>
+            <button mat-raised-button color="warn" (click)="closeNewOfferModal()">Mégsem</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+
+    <div class="cards">
+      <mat-card *ngFor="let item of myOffers">
+        <mat-card-title>
+          <input *ngIf="editing[item.id]" [(ngModel)]="item.name">
+          <span *ngIf="!editing[item.id]">{{item.name}}</span>
+          <mat-icon matSuffix fontIcon="edit" (click)="toggleEdit(item.id)"></mat-icon>
+        </mat-card-title>
+        <mat-card-content>
+          <div class="info">
+            <mat-icon fontIcon="domain"></mat-icon>
+            <input *ngIf="editing[item.id]" [(ngModel)]="item.company">
+            <span *ngIf="!editing[item.id]">{{item.company}}</span><br>
+            <mat-icon fontIcon="location_on"></mat-icon>
+            <input *ngIf="editing[item.id]" [(ngModel)]="item.employerAddress">
+            <span *ngIf="!editing[item.id]">{{item.employerAddress}}</span><br>
+            <mat-icon fontIcon="attach_money"></mat-icon>
+            <input *ngIf="editing[item.id]" [(ngModel)]="item.salary" type="text">
+            <span *ngIf="!editing[item.id]"><strong>{{item.salary}}</strong></span>
+          </div>
+          <input *ngIf="editing[item.id]" [(ngModel)]="item.description" class="description">
+          <span *ngIf="!editing[item.id]" class="description">{{item.description}}</span>
+          <div class="actions">
+            <button mat-raised-button color="primary" *ngIf="editing[item.id]" (click)="save(item)">Mentés</button>
+            <button mat-raised-button color="warn" (click)="deleteOffer(item.id)">✘ Hírdetés törlése</button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

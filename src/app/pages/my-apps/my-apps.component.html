@@ -1,7 +1,7 @@
-<app-navbar />
+<app-navbar/>
 <div class="content">
   <div class="card-container">
-    <h1>Állásajánlatok</h1>
+    <h1>Jelentkezéseim</h1>
     <div class="cards">
       <mat-card *ngFor="let item of ads">
         <mat-card-title>
@@ -14,10 +14,10 @@
             <mat-icon fontIcon="attach_money"></mat-icon> <strong>{{item.salary}}</strong>
           </div>
           <p class="description">{{item.description}}</p>
-          <p *ngIf="auth._authLevel == 1 && apps.includes(item['id'])">✓ Jelentkezve</p>
+          <p>✓ Jelentkezve</p>
           <div class="actions">
-            <button color="primary" mat-raised-button *ngIf="auth._authLevel == 1 && !apps.includes(item['id'])" (click)="onApplyPressed(item['id'])">Jelentkezek</button>
-            <button color="warn" mat-raised-button *ngIf="auth._authLevel == 1 && apps.includes(item['id'])" (click)="onDeapplyPressed(item['id'])">✘ Jelenkezés törlése</button>
+            <button color="warn" mat-raised-button (click)="onDeapplyPressed(item['id'])">✘ Jelenkezés törlése
+            </button>
           </div>
         </mat-card-content>
       </mat-card>

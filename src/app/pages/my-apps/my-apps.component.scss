@@ -39,12 +39,6 @@ mat-card {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  &.expanded {
-    height: auto;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  }
 
   mat-card-title {
     padding: 15px 10px;

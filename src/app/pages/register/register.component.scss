@@ -75,5 +75,17 @@ html, body {
         font-weight: 600;
       }
     }
+
+    .back-to-home {
+      text-align: center;
+      font-size: 0.8rem;
+      margin-top: 0.8rem;
+
+      .back-to-home-link {
+        color: #1976d2;
+        text-decoration: underline;
+        font-weight: 600;
+      }
+    }
   }
 }

@@ -6,4 +6,5 @@ export interface Employer {
   address: string;
   industry: string;
   description: string;
+  isSeeker: boolean;
 }

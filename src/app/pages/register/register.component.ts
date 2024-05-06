@@ -1,102 +1,113 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AuthService} from "../../shared/services/auth.service";
-import {Data, Router} from "@angular/router";
-import {Seeker} from "../../models/Seeker";
-import {Employer} from "../../models/Employer";
-import {user} from "@angular/fire/auth";
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
+import { AuthService } from "../../shared/services/auth.service";
+import { Router } from "@angular/router";
 import {DataService} from "../../shared/services/data.service";
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+    selector: 'app-register',
+    templateUrl: './register.component.html',
+    styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-  registerForm!: FormGroup;
-  industries: string[] = [
-    'Technológia',
-    'Informatika',
-    'Pénzügyi szolgáltatások',
-    'Egészségügy',
-    'Oktatás',
-    'Építőipar',
-    'Vendéglátás',
-    'Média',
-    'Kiskereskedelem',
-    'Mezőgazdaság',
-    'Gyártás'
-  ];
+    registerForm!: FormGroup;
+    industries: string[] = [
+        'Technológia',
+        'Informatika',
+        'Pénzügyi szolgáltatások',
+        'Egészségügy',
+        'Oktatás',
+        'Építőipar',
+        'Vendéglátás',
+        'Média',
+        'Kiskereskedelem',
+        'Mezőgazdaság',
+        'Gyártás'
+    ];
 
-  constructor(private fb: FormBuilder, private auth: AuthService, private route: Router, protected db: DataService) {
-  }
+    constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private db: DataService) {}
 
-  ngOnInit() {
-    this.registerForm = this.fb.group({
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      passwordConfirm: ['', Validators.required],
-      isEmployer: [false],
-      companyName: [''],
-      industry: [''],
-      address: ['']
-    });
-  }
+    ngOnInit() {
+        this.registerForm = this.fb.group({
+            name: ['', Validators.required],
+            email: ['', [Validators.required, Validators.email]],
+            password: ['', [Validators.required, Validators.minLength(6)]],
+            passwordConfirm: ['', Validators.required],
+            isEmployer: [false],
+            companyName: [''],
+            industry: [''],
+            address: ['']
+        }, { validator: this.passwordMatchValidator() });
 
-  private isEmployer() {
-    return this.registerForm.get('isEmployer')?.value
-  }
-
-  onSubmit() {
-    console.log(this.registerForm.value);
-    this.auth.signup(this.registerForm.get('email')?.value as string, this.registerForm.get('password')?.value as string)
-      .then(async (cred) => {  // Mark the function as async
-        if (cred && cred.user) {
-          console.log(cred);
-          if (!this.isEmployer()) {
-            const user: Seeker = {
-              id: cred.user.uid as string,
-              name: this.registerForm.get('name')?.value as string,
-              email: this.registerForm.get('email')?.value as string,
-              isSeeker: true
-            };
-
-            try {
-              let result = await this.db.createSeeker(cred.user.uid, user);
-              if (result) {
-                alert("Sikeres regisztráció!");
-              }
-            } catch (error) {
-              console.error("Hiba történt a munkakereső létrehozása során.", error);
+        this.registerForm.get('isEmployer')?.valueChanges.subscribe(isEmployer => {
+            if (isEmployer) {
+                this.registerForm.get('companyName')!.setValidators([Validators.required]);
+                this.registerForm.get('industry')!.setValidators([Validators.required]);
+                this.registerForm.get('address')!.setValidators([Validators.required]);
+            } else {
+                this.registerForm.get('companyName')!.clearValidators();
+                this.registerForm.get('industry')!.clearValidators();
+                this.registerForm.get('address')!.clearValidators();
             }
-          } else {
-            const user: Employer = {
-              id: cred.user.uid as string,
-              name: this.registerForm.get('name')?.value as string,
-              email: this.registerForm.get('email')?.value as string,
-              company: this.registerForm.get('companyName')?.value as string,
-              address: this.registerForm.get('address')?.value as string,
-              industry: this.registerForm.get('industry')?.value as string,
-              description: ""
-            };
+            this.registerForm.get('companyName')!.updateValueAndValidity();
+            this.registerForm.get('industry')!.updateValueAndValidity();
+            this.registerForm.get('address')!.updateValueAndValidity();
+        });
+    }
 
+    private passwordMatchValidator(): ValidatorFn {
+        return (group: AbstractControl): {[key: string]: any} | null => {
+            let pass = group.get('password')?.value;
+            let confirmPass = group.get('passwordConfirm')?.value;
+            return pass === confirmPass ? null : { notSame: true };
+        };
+    }
+
+    async onSubmit() {
+        if (this.registerForm.valid) {
+            const { email, password, name, isEmployer, companyName, industry, address } = this.registerForm.value;
             try {
-              let result = await this.db.createEmployer(cred.user.uid, user);
-              if (result) {
-                alert("Sikeres regisztráció!");
-              }
+                const cred = await this.authService.signUp(email, password);
+                if (!cred || !cred.user) {
+                    console.error("No credentials returned");
+                    alert("Regisztráció sikertelen, a felhasználói adatok nem érhetők el.");
+                    return;
+                }
+                const user = isEmployer ? {
+                    id: cred.user.uid,
+                    name,
+                    email,
+                    company: companyName,
+                    industry,
+                    address,
+                    description: "",
+                    isEmployer: true,
+                    isSeeker: false
+                } : {
+                    id: cred.user.uid,
+                    name,
+                    email,
+                    isEmployer: false,
+                    isSeeker: true
+                };
+
+                console.log("Registering user: ", user);
+
+                const success = await this.db.createUser(user);
+                if (success) {
+                    //alert("Sikeres regisztráció!");
+                    await this.authService.login(email, password)
+                    await this.router.navigate(['/home']);
+                } else {
+                    alert("A felhasználó létrehozása sikertelen.");
+                }
             } catch (error) {
-              console.error("Hiba történt a munkakereső létrehozása során.", error);
+                console.error("Regisztráció sikertelen: ", error);
+                alert("Regisztráció sikertelen, próbálja újra.");
             }
-          }
         } else {
-          console.error("Nem sikerült bejelentkezni, a felhasználói adatok nem érhetők el.");
+            alert("Kérjük, töltse ki helyesen az űrlapot.");
         }
-      }).catch((err: Error) => {
-      console.log("Sikertelen", err.message);
-    });
-  }
-
+    }
 
 }

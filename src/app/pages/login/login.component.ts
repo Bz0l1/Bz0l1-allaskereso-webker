@@ -1,52 +1,47 @@
-import {Component} from '@angular/core';
-import {FormGroup, FormControl, Validators} from '@angular/forms';
-import {AuthService} from "../../shared/services/auth.service";
-import {Router} from '@angular/router';
+import { Component } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { AuthService } from "../../shared/services/auth.service";
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  loginForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required])
-  });
+    loginForm = new FormGroup({
+        email: new FormControl('', [Validators.required, Validators.email]),
+        password: new FormControl('', [Validators.required])
+    });
+    errorMessage: string = '';
 
-  constructor(private router: Router, private authService: AuthService) {
-  }
+    constructor(private authService: AuthService, private router: Router) {}
 
-  onSubmit() {
-    if (this.loginForm.valid) {
-      const email = this.loginForm.get('email')!.value;
-      const password = this.loginForm.get('password')!.value;
+    async onSubmit() {
+        if (this.loginForm.valid) {
+            const email = this.loginForm.get('email')!.value;
+            const password = this.loginForm.get('password')!.value;
 
-      if (email && password) { // Check if not null
-        this.authService.login(email, password)
-          .then(() => {
-            this.router.navigateByUrl('/home').then(success => {
-              if(!success) {
-                console.log('Sikertelen Home')
-              }
-              console.log('Sikeres Login és Home');
-            })
+            if (email === null || password === null) {
+                alert('Email és jelszó megadása kötelező!');
+                return;
+            }
 
-
-          })
-          .catch(error => {
-            console.log("Sikertelen login")
-
-          });
-      } else {
-        console.error('Email vagy Jelszo null');
-
-      }
+            try {
+                await this.authService.login(email, password);
+                this.router.navigate(["home"]);
+            } catch (error) {
+                alert("Hibás felhasználónév vagy jelszó!");
+                this.loginForm.reset(); // Töröljük a form mezőket
+            }
+        } else {
+            alert('Kérjük, töltse ki helyesen a formot!');
+        }
     }
-  }
 
 
-  get showErrorMessage() {
-    return this.loginForm.invalid && (this.loginForm.dirty || this.loginForm.touched);
-  }
+
+    get showErrorMessage() {
+        return this.errorMessage || (this.loginForm.invalid && (this.loginForm.dirty || this.loginForm.touched));
+    }
 }
