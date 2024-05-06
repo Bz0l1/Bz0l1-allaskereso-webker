@@ -1,6 +1,6 @@
 ## Hosting link
 
-Hosting link: [https://allaskereso-5bd68.web.app/](https://allaskereso-webker-96da9.web.app/)
+Hosting link: https://allaskereso-webker-96da9.web.app/
 
 ## Felhasználók:
 
